@@ -24,4 +24,10 @@ import org.apache.hadoop.io.Text;
 
 public class BFS extends Configured implements Tool {
     
+  private static final Logger LOG = Logger.getLogger(BFS.class);
+
+  public static void main(String[] args) throws Exception {
+    int res = ToolRunner.run(new BFS(), args);
+    System.exit(res);
+  }
 }
