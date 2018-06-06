@@ -35,10 +35,10 @@ public class BFS extends Configured implements Tool {
     Map class
 
     Parameters:
-        @param IntWritable: Input key type
-        @param IntWritable: Input value type
-        @param IntWritable: Output key type
-        @param IntWritable: Output value type
+        @param LongWritable: Input key type
+        @param Text: Input value type
+        @param LongWritable: Output key type
+        @param Text: Output value type
    */
   public static class Map extends Mapper<LongWritable, Text, LongWritable, Text> {
     public void map(LongWritable key, Text value, Context context)
@@ -53,10 +53,10 @@ public class BFS extends Configured implements Tool {
     Reduce class
 
     Parameters:
-        @param IntWritable: Input key type
-        @param IntWritable: Input value type
-        @param IntWritable: Output key type
-        @param IntWritable: Output value type
+        @param LongWritable: Input key type
+        @param Text: Input value type
+        @param LongWritable: Output key type
+        @param Text: Output value type
    */
   public static class Reduce extends Reducer<LongWritable, Text, LongWritable, Text> {
     LongWritable root = new LongWritable(Integer.parseInt("1"));
@@ -64,24 +64,27 @@ public class BFS extends Configured implements Tool {
     public void reduce(LongWritable key, Iterable<Text> values, Context context)
         throws IOException, InterruptedException {
 
-	    String adj_list = "";
+	   	String adj_list = "";
 
-            for (Text value : values) {
-              adj_list += String.format("%s", value);
-            }
+		// For every value in the list of values, create a list of values separated by a space,
+		// these values conform the adjacency list of the node
+		for (Text value : values) {
+			adj_list += String.format("%s", value);
+		}
 	    
-            String formatted_line;
+		String formatted_line;
 
+		// If the key equals 1, it means it's the root, which has distance 0
 	    if(key.equals(root)){
 	        formatted_line = String.format("0\t%s", adj_list);
-            }
+		}
+		// else, it's another node that is not the root, which hasn't been explored, and it has a distance of infinitum
 	    else{
-		formatted_line = String.format("inf\t%s", adj_list);
-            }            
+			formatted_line = String.format("inf\t%s", adj_list);
+		}            
 
            // It will write the lines in the following format: 
            // node_id<tab>distance<tab>adj_list
-
             context.write(key, new Text(formatted_line));
         }
   }
