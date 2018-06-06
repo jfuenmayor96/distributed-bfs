@@ -69,7 +69,7 @@ public class BFS extends Configured implements Tool {
 		// For every value in the list of values, create a list of values separated by a space,
 		// these values conform the adjacency list of the node
 		for (Text value : values) {
-			adj_list += String.format("%s", value);
+			adj_list += String.format("%s ", value);
 		}
 	    
 		String formatted_line;
@@ -80,7 +80,7 @@ public class BFS extends Configured implements Tool {
 		}
 		// else, it's another node that is not the root, which hasn't been explored, and it has a distance of infinitum
 	    else{
-			formatted_line = String.format("inf\t%s", adj_list);
+			formatted_line = String.format("%d\t%s", Integer.MAX_VALUE, adj_list);
 		}            
 
            // It will write the lines in the following format: 
