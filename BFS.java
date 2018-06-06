@@ -45,7 +45,7 @@ public class BFS extends Configured implements Tool {
         throws IOException, InterruptedException {
       //String line = lineText.toString();
       //String[] fields = line.split("\s");
-      //context.write(new Text(fields[0]), new Text("cust\t" + fields[1] + fields[2]));
+          context.write(value);
         }
   }
 
@@ -64,7 +64,9 @@ public class BFS extends Configured implements Tool {
         throws IOException, InterruptedException {
       //String line = lineText.toString();
       //String[] fields = line.split("\s");
-      //context.write(new Text(fields[0]), new Text("cust\t" + fields[1] + fields[2]));
+          context.write(values);
         }
   }
+
+
 }
