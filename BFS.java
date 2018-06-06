@@ -45,7 +45,7 @@ public class BFS extends Configured implements Tool {
         throws IOException, InterruptedException {
       //String line = lineText.toString();
       //String[] fields = line.split("\s");
-          context.write(value);
+          context.write(value, value);
         }
   }
 
@@ -64,9 +64,19 @@ public class BFS extends Configured implements Tool {
         throws IOException, InterruptedException {
       //String line = lineText.toString();
       //String[] fields = line.split("\s");
-          context.write(values);
+          context.write(values, values);
         }
   }
 
-
+    public int run(String[] args) throws Exception {
+      Job job = Job.getInstance(getConf(), "BFS");
+      job.setJarByClass(this.getClass());	
+      FileInputFormat.addInputPath(job, new Path(args[0]));
+      FileOutputFormat.setOutputPath(job, new Path(args[1]));
+      job.setMapperClass(Map.class);
+      job.setReducerClass(Reduce.class);
+      job.setOutputKeyClass(IntWritable.class);
+      job.setOutputValueClass(IntWritable.class);
+      return job.waitForCompletion(true) ? 0 : 1;
+    }
 }
