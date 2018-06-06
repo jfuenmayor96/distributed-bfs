@@ -59,6 +59,7 @@ public class BFS extends Configured implements Tool {
         @param IntWritable: Output value type
    */
   public static class Reduce extends Reducer<LongWritable, Text, LongWritable, Text> {
+    LongWritable root = new LongWritable(Integer.parseInt("1"));
     @Override
     public void reduce(LongWritable key, Iterable<Text> values, Context context)
         throws IOException, InterruptedException {
@@ -66,9 +67,22 @@ public class BFS extends Configured implements Tool {
 	    String adj_list = "";
 
             for (Text value : values) {
-              adj_list += String.format(" %s", value);
+              adj_list += String.format("%s", value);
             }
-	      context.write(key, new Text(adj_list));
+	    
+            String formatted_line;
+
+	    if(key.equals(root)){
+	        formatted_line = String.format("0\t%s", adj_list);
+            }
+	    else{
+		formatted_line = String.format("inf\t%s", adj_list);
+            }            
+
+           // It will write the lines in the following format: 
+           // node_id<tab>distance<tab>adj_list
+
+            context.write(key, new Text(formatted_line));
         }
   }
 
