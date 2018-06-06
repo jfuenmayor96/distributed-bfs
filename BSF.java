@@ -48,4 +48,23 @@ public class BFS extends Configured implements Tool {
       //context.write(new Text(fields[0]), new Text("cust\t" + fields[1] + fields[2]));
         }
   }
+
+  /*
+    Reduce class
+
+    Parameters:
+        @param IntWritable: Input key type
+        @param IntWritable: Input value type
+        @param IntWritable: Output key type
+        @param IntWritable: Output value type
+   */
+  public static class Reduce extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
+    @Override
+    public void reduce(IntWritable key, Iterable<IntWritable> values, Context context)
+        throws IOException, InterruptedException {
+      //String line = lineText.toString();
+      //String[] fields = line.split("\s");
+      //context.write(new Text(fields[0]), new Text("cust\t" + fields[1] + fields[2]));
+        }
+  }
 }
