@@ -40,12 +40,12 @@ public class BFS extends Configured implements Tool {
         @param IntWritable: Output key type
         @param IntWritable: Output value type
    */
-  public static class Map extends Mapper<IntWritable, IntWritable, IntWritable, IntWritable> {
-    public void map(IntWritable key, IntWritable value, Context context)
+  public static class Map extends Mapper<LongWritable, Text, LongWritable, Text> {
+    public void map(LongWritable key, Text value, Context context)
         throws IOException, InterruptedException {
-      //String line = lineText.toString();
-      //String[] fields = line.split("\s");
-          context.write(value, value);
+      	  String line = value.toString();
+          String[] fields = line.split("\t");
+          context.write(new LongWritable(Integer.parseInt(fields[0])), new Text(fields[1]));
         }
   }
 
@@ -58,17 +58,17 @@ public class BFS extends Configured implements Tool {
         @param IntWritable: Output key type
         @param IntWritable: Output value type
    */
-  public static class Reduce extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
+  public static class Reduce extends Reducer<LongWritable, Text, LongWritable, Text> {
     @Override
-    public void reduce(IntWritable key, Iterable<IntWritable> values, Context context)
+    public void reduce(LongWritable key, Iterable<Text> values, Context context)
         throws IOException, InterruptedException {
-      //String line = lineText.toString();
-      //String[] fields = line.split("\s");
-            int val;
-            for (IntWritable value : values) {
-              value = value.get();
+
+	    String adj_list = "";
+
+            for (Text value : values) {
+              adj_list += String.format(" %s", value);
             }
-            context.write(new IntWritable(val), new IntWritable(val));
+	      context.write(key, new Text(adj_list));
         }
   }
 
@@ -79,8 +79,8 @@ public class BFS extends Configured implements Tool {
       FileOutputFormat.setOutputPath(job, new Path(args[1]));
       job.setMapperClass(Map.class);
       job.setReducerClass(Reduce.class);
-      job.setOutputKeyClass(IntWritable.class);
-      job.setOutputValueClass(IntWritable.class);
+      job.setOutputKeyClass(LongWritable.class);
+      job.setOutputValueClass(Text.class);
       return job.waitForCompletion(true) ? 0 : 1;
     }
 }
